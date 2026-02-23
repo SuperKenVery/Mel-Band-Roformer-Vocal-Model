@@ -1,0 +1,1 @@
+pixi run python inference.py --config_path configs/config_vocals_mel_band_roformer.yaml --model_path /Users/bytedance/Downloads/MelBandRoformer.ckpt --input_folder /Users/bytedance/Desktop/music-instrumental-extract/inputs --store_dir /Users/bytedance/Desktop/music-instrumental-extract/outputs

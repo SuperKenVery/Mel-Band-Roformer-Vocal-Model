@@ -112,6 +112,9 @@ def proc_folder(args):
         else:
             device = torch.device(f'cuda:{device_ids[0]}')
             model = nn.DataParallel(model, device_ids=device_ids).to(device)
+    elif torch.mps.is_available():
+        device = "mps"
+        model = model.to(device)
     else:
         device = 'cpu'
         print('CUDA is not available. Run inference on CPU. It will be very slow...')

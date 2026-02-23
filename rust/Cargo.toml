@@ -1,0 +1,47 @@
+[package]
+name = "mel-band-roformer"
+version = "0.1.0"
+edition = "2024"
+authors = ["MelBandRoformer Contributors"]
+description = "GPU-accelerated Mel-Band-Roformer inference in Rust using Burn"
+license = "MIT"
+readme = "README.md"
+
+[[bin]]
+name = "mel-band-roformer"
+path = "src/main.rs"
+
+[lib]
+name = "mel_band_roformer"
+path = "src/lib.rs"
+
+[dependencies]
+burn = { path = "/Users/bytedance/Projects/burn/crates/burn", features = ["wgpu", "ndarray", "metal"] }
+burn-ndarray = { path = "/Users/bytedance/Projects/burn/crates/burn-ndarray" }
+burn-store = { path = "/Users/bytedance/Projects/burn/crates/burn-store", features = ["pytorch", "burnpack"] }
+hound = "3.5"
+ndarray = "0.16"
+clap = { version = "4", features = ["derive"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_yaml = "0.9"
+thiserror = "2.0"
+num-complex = "0.4"
+rustfft = "6.2"
+realfft = "3.4"
+rayon = "1.10"
+log = "0.4"
+env_logger = "0.11"
+indicatif = "0.17"
+
+[dev-dependencies]
+approx = "0.5"
+
+[features]
+default = ["wgpu"]
+wgpu = []
+cuda = []
+
+[profile.release]
+lto = true
+codegen-units = 1
+opt-level = 3

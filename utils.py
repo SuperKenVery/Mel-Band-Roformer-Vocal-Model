@@ -4,6 +4,11 @@ import torch
 import sys
 import torch.nn as nn
 
+device = "cpu"
+if torch.cuda.is_available():
+    device = "cuda"
+elif torch.mps.is_available():
+    device = "mps"
 
 def get_model_from_config(model_type, config):
     if model_type == 'mel_band_roformer':
@@ -13,7 +18,7 @@ def get_model_from_config(model_type, config):
         )
     else:
         print('Unknown model: {}'.format(model_type))
-        model = None
+        raise NotImplementedError
 
     return model
 
@@ -38,7 +43,7 @@ def demix_track(config, model, mix, device, first_chunk_time=None):
 
     windowing_array = get_windowing_array(C, fade_size, device)
 
-    with torch.cuda.amp.autocast():
+    with torch.amp.autocast(device_type=device):
         with torch.no_grad():
             if config.training.target_instrument is not None:
                 req_shape = (1, ) + tuple(mix.shape)
