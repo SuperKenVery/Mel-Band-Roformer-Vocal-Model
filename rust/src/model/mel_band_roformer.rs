@@ -139,10 +139,10 @@ fn compute_mel_filter_bank(sample_rate: u32, n_fft: usize, num_mels: usize) -> V
 
 #[derive(Module, Debug)]
 pub struct MelBandRoformer<B: Backend> {
-    band_split: BandSplit<B>,
-    time_transformers: Vec<Transformer<B>>,
-    freq_transformers: Vec<Transformer<B>>,
-    mask_estimators: Vec<MaskEstimator<B>>,
+    pub band_split: BandSplit<B>,
+    pub time_transformers: Vec<Transformer<B>>,
+    pub freq_transformers: Vec<Transformer<B>>,
+    pub mask_estimators: Vec<MaskEstimator<B>>,
     config: Ignored<ModelConfig>,
     mel_filter_bank: Ignored<MelFilterBank>,
     time_rotary: Ignored<RotaryEmbedding>,

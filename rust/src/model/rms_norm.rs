@@ -23,7 +23,8 @@ impl<B: Backend> RmsNorm<B> {
     }
 
     pub fn forward<const D: usize>(&self, x: Tensor<B, D>) -> Tensor<B, D> {
-        let normalized = normalize_last_dim(x);
+        // Match PyTorch: F.normalize(x, dim=-1) * scale * gamma
+        let normalized = l2_normalize_last_dim(x);
         let gamma = self.gamma.val().unsqueeze();
         normalized.mul_scalar(self.scale) * gamma
     }
@@ -33,12 +34,13 @@ impl<B: Backend> RmsNorm<B> {
     }
 }
 
-fn normalize_last_dim<B: Backend, const D: usize>(x: Tensor<B, D>) -> Tensor<B, D> {
+fn l2_normalize_last_dim<B: Backend, const D: usize>(x: Tensor<B, D>) -> Tensor<B, D> {
+    // Match PyTorch F.normalize(x, dim=-1) which divides by L2 norm
     let eps = 1e-8;
     let squared = x.clone().powf_scalar(2.0);
-    let mean_squared = squared.mean_dim(D - 1);
-    let rms = (mean_squared + eps).sqrt();
-    x / rms
+    let sum_squared = squared.sum_dim(D - 1);  // sum, not mean
+    let l2_norm = (sum_squared + eps).sqrt();
+    x / l2_norm
 }
 
 #[cfg(test)]

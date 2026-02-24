@@ -5,9 +5,9 @@ use burn::tensor::backend::Backend;
 
 #[derive(Module, Debug)]
 pub struct MLP<B: Backend> {
-    linear1: Linear<B>,
-    linear2: Linear<B>,
-    linear3: Linear<B>,
+    pub linear1: Linear<B>,
+    pub linear2: Linear<B>,
+    pub linear3: Linear<B>,
 }
 
 impl<B: Backend> MLP<B> {
@@ -30,8 +30,8 @@ impl<B: Backend> MLP<B> {
 
 #[derive(Module, Debug)]
 pub struct MaskEstimatorBand<B: Backend> {
-    mlp: MLP<B>,
-    dim_out: usize,
+    pub mlp: MLP<B>,
+    pub dim_out: usize,
 }
 
 impl<B: Backend> MaskEstimatorBand<B> {
@@ -45,8 +45,9 @@ impl<B: Backend> MaskEstimatorBand<B> {
         let out = self.mlp.forward(x);
         let [n, total] = out.dims();
 
-        let gate = out.clone().slice([0..n, 0..self.dim_out]);
-        let value = out.slice([0..n, self.dim_out..total]);
+        // GLU: first_half * sigmoid(second_half) (matching PyTorch nn.GLU(dim=-1))
+        let value = out.clone().slice([0..n, 0..self.dim_out]);
+        let gate = out.slice([0..n, self.dim_out..total]);
 
         value * burn::tensor::activation::sigmoid(gate)
     }
@@ -54,8 +55,8 @@ impl<B: Backend> MaskEstimatorBand<B> {
 
 #[derive(Module, Debug)]
 pub struct MaskEstimator<B: Backend> {
-    to_freqs: Vec<MaskEstimatorBand<B>>,
-    dim_inputs: Vec<usize>,
+    pub to_freqs: Vec<MaskEstimatorBand<B>>,
+    pub dim_inputs: Vec<usize>,
 }
 
 impl<B: Backend> MaskEstimator<B> {

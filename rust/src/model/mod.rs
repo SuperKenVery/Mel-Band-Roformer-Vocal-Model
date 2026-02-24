@@ -8,4 +8,4 @@ pub mod rotary;
 pub mod transformer;
 
 pub use config::ModelConfig;
-pub use mel_band_roformer::MelBandRoformer;
+pub use mel_band_roformer::{MelBandRoformer, MelFilterBank};

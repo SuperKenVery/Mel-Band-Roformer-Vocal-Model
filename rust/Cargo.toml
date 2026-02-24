@@ -40,6 +40,7 @@ approx = "0.5"
 default = ["wgpu"]
 wgpu = []
 cuda = []
+debug = []
 
 [profile.release]
 lto = true
