@@ -11,6 +11,10 @@ readme = "README.md"
 name = "mel-band-roformer"
 path = "src/main.rs"
 
+[[bin]]
+name = "convert"
+path = "src/bin/convert.rs"
+
 [lib]
 name = "mel_band_roformer"
 path = "src/lib.rs"

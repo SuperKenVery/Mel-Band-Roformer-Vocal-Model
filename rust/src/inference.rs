@@ -1,7 +1,7 @@
-use crate::io::weights::{WeightFormat, WeightsError, load_config_for_model};
+use crate::io::weights::{WeightsError, load_config_for_model};
 use crate::model::{MelBandRoformer, ModelConfig};
 use burn::tensor::backend::Backend;
-use burn_store::{BurnpackStore, ModuleSnapshot, PytorchStore};
+use burn_store::{BurnpackStore, ModuleSnapshot};
 use std::path::Path;
 use thiserror::Error;
 
@@ -15,8 +15,6 @@ pub enum InferenceError {
     InvalidAudioFormat,
     #[error("Failed to load model: {0}")]
     LoadError(String),
-    #[error("Failed to save model: {0}")]
-    SaveError(String),
 }
 
 pub struct InferenceEngine<B: Backend> {
@@ -32,59 +30,17 @@ impl<B: Backend> InferenceEngine<B> {
     ) -> Result<Self, InferenceError> {
         let mut config = load_config_for_model(model_path, config_path)?;
         
-        // Disable dropout for inference
         config.attn_dropout = 0.0;
         config.ff_dropout = 0.0;
         
         let mut model = MelBandRoformer::<B>::new(device, config.clone());
 
-        let format = WeightFormat::from_path(model_path)?;
-
-        match format {
-            WeightFormat::Burn => {
-                let mut store = BurnpackStore::from_file(model_path);
-                model.load_from(&mut store).map_err(|e| {
-                    InferenceError::LoadError(format!("Failed to load burn model: {:?}", e))
-                })?;
-            }
-            WeightFormat::Pytorch => {
-                let mut store = PytorchStore::from_file(model_path)
-                    .with_key_remapping(r"^layers\.(\d+)\.0\.", "time_transformers.$1.")
-                    .with_key_remapping(r"^layers\.(\d+)\.1\.", "freq_transformers.$1.")
-                    .with_key_remapping(r"\.layers\.(\d+)\.0\.rotary_embed\.freqs", ".layers.$1.rotary_freqs")
-                    .with_key_remapping(r"\.layers\.(\d+)\.0\.norm\.", ".layers.$1.attention.norm.")
-                    .with_key_remapping(r"\.layers\.(\d+)\.0\.to_qkv\.", ".layers.$1.attention.to_qkv.")
-                    .with_key_remapping(r"\.layers\.(\d+)\.0\.to_gates\.", ".layers.$1.attention.to_gates.")
-                    .with_key_remapping(r"\.layers\.(\d+)\.0\.to_out\.0\.", ".layers.$1.attention.to_out.")
-                    .with_key_remapping(r"\.layers\.(\d+)\.1\.net\.0\.", ".layers.$1.ff.norm.")
-                    .with_key_remapping(r"\.layers\.(\d+)\.1\.net\.1\.", ".layers.$1.ff.linear1.")
-                    .with_key_remapping(r"\.layers\.(\d+)\.1\.net\.4\.", ".layers.$1.ff.linear2.")
-                    .with_key_remapping(r"band_split\.to_features\.(\d+)\.0\.", "band_split.to_features.$1.norm.")
-                    .with_key_remapping(r"band_split\.to_features\.(\d+)\.1\.", "band_split.to_features.$1.linear.")
-                    .with_key_remapping(r"mask_estimators\.(\d+)\.to_freqs\.(\d+)\.0\.0\.", "mask_estimators.$1.to_freqs.$2.mlp.linear1.")
-                    .with_key_remapping(r"mask_estimators\.(\d+)\.to_freqs\.(\d+)\.0\.2\.", "mask_estimators.$1.to_freqs.$2.mlp.linear2.")
-                    .with_key_remapping(r"mask_estimators\.(\d+)\.to_freqs\.(\d+)\.0\.4\.", "mask_estimators.$1.to_freqs.$2.mlp.linear3.")
-                    .allow_partial(true);
-                model.load_from(&mut store).map_err(|e| {
-                    InferenceError::LoadError(format!("Failed to load pytorch model: {:?}", e))
-                })?;
-            }
-        }
+        let mut store = BurnpackStore::from_file(model_path);
+        model.load_from(&mut store).map_err(|e| {
+            InferenceError::LoadError(format!("Failed to load model: {:?}", e))
+        })?;
 
         Ok(Self { model, config })
-    }
-
-    pub fn from_config(config: ModelConfig, device: &B::Device) -> Self {
-        let model = MelBandRoformer::<B>::new(device, config.clone());
-        Self { model, config }
-    }
-
-    pub fn save_burn(&self, output_path: &Path) -> Result<(), InferenceError> {
-        let mut store = BurnpackStore::from_file(output_path).overwrite(true);
-        self.model.save_into(&mut store).map_err(|e| {
-            InferenceError::SaveError(format!("Failed to save burn model: {:?}", e))
-        })?;
-        Ok(())
     }
 
     pub fn separate(
@@ -183,23 +139,4 @@ impl<B: Backend> InferenceEngine<B> {
     pub fn config(&self) -> &ModelConfig {
         &self.config
     }
-
-    pub fn model(&self) -> &MelBandRoformer<B> {
-        &self.model
-    }
-
-    pub fn into_model(self) -> MelBandRoformer<B> {
-        self.model
-    }
-}
-
-pub fn convert_pytorch_to_burn<B: Backend>(
-    pytorch_path: &Path,
-    output_path: &Path,
-    config_path: Option<&Path>,
-    device: &B::Device,
-) -> Result<(), InferenceError> {
-    let engine: InferenceEngine<B> = InferenceEngine::new(pytorch_path, config_path, device)?;
-    engine.save_burn(output_path)?;
-    Ok(())
 }
