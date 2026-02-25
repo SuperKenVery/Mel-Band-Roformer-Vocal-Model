@@ -47,6 +47,9 @@ def compare(name, shape=None):
         print("  MATCH!")
 
 def main():
+    compare("x_before_band_split")
+    compare("x_after_band_split")
+
     compare("layer0_time_attn")
     compare("layer0_time_ff")
     
@@ -62,6 +65,9 @@ def main():
     compare("layer0_freq_ff_norm")
     compare("layer0_freq_ff_linear1")
     compare("layer0_freq_ff")
+
+    compare("band59_norm")
+    compare("band59_out")
 
 if __name__ == "__main__":
     main()

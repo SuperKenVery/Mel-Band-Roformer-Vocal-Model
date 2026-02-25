@@ -30,7 +30,12 @@ impl<B: Backend> InferenceEngine<B> {
         config_path: Option<&Path>,
         device: &B::Device,
     ) -> Result<Self, InferenceError> {
-        let config = load_config_for_model(model_path, config_path)?;
+        let mut config = load_config_for_model(model_path, config_path)?;
+        
+        // Disable dropout for inference
+        config.attn_dropout = 0.0;
+        config.ff_dropout = 0.0;
+        
         let mut model = MelBandRoformer::<B>::new(device, config.clone());
 
         let format = WeightFormat::from_path(model_path)?;
@@ -41,7 +46,6 @@ impl<B: Backend> InferenceEngine<B> {
                 model.load_from(&mut store).map_err(|e| {
                     InferenceError::LoadError(format!("Failed to load burn model: {:?}", e))
                 })?;
-                // model.fix_load_weights(); // Weights in Burn format should already be correct
             }
             WeightFormat::Pytorch => {
                 let mut store = PytorchStore::from_file(model_path)
@@ -64,7 +68,6 @@ impl<B: Backend> InferenceEngine<B> {
                 model.load_from(&mut store).map_err(|e| {
                     InferenceError::LoadError(format!("Failed to load pytorch model: {:?}", e))
                 })?;
-                model.fix_load_weights();
             }
         }
 
@@ -183,6 +186,10 @@ impl<B: Backend> InferenceEngine<B> {
 
     pub fn model(&self) -> &MelBandRoformer<B> {
         &self.model
+    }
+
+    pub fn into_model(self) -> MelBandRoformer<B> {
+        self.model
     }
 }
 

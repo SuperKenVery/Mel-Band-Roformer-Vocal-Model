@@ -30,6 +30,32 @@ def dump_intermediates(audio_path, model_path, config_path, output_dir="/tmp/pyt
     print(f"Input shape: {raw_audio.shape}")
     np.save(f"{output_dir}/input.npy", raw_audio.numpy())
     
+    # Print BandSplit 0 stats
+    bs0_gamma = model.band_split.to_features[0][0].gamma
+    bs0_weight = model.band_split.to_features[0][1].weight
+    bs0_bias = model.band_split.to_features[0][1].bias
+    
+    print(f"BandSplit 0 Norm Gamma: shape={bs0_gamma.shape}, mean={bs0_gamma.mean().item():.6f}")
+    
+    # Calculate std of gamma deviation from 1.0 to match Rust check
+    gamma_std = ((bs0_gamma - 1.0).pow(2).mean()).sqrt().item()
+    print(f"BandSplit 0 Norm Gamma std (from 1.0): {gamma_std:.6f}")
+    
+    print(f"BandSplit 0 Linear Weight: shape={bs0_weight.shape}, mean={bs0_weight.mean().item():.6f}, std={bs0_weight.std().item():.6f}")
+    print(f"BandSplit 0 Linear Bias: shape={bs0_bias.shape}, mean={bs0_bias.mean().item():.6f}")
+    
+    # Print BandSplit 59 stats
+    bs59_gamma = model.band_split.to_features[59][0].gamma
+    bs59_weight = model.band_split.to_features[59][1].weight
+    bs59_bias = model.band_split.to_features[59][1].bias
+    
+    print(f"BandSplit 59 Norm Gamma: shape={bs59_gamma.shape}, mean={bs59_gamma.mean().item():.6f}")
+    print(f"BandSplit 59 Linear Weight: shape={bs59_weight.shape}, mean={bs59_weight.mean().item():.6f}")
+    print(f"BandSplit 59 Linear Bias: shape={bs59_bias.shape}, mean={bs59_bias.mean().item():.6f}")
+
+    print(f"dim_inputs first 10: {model.band_split.dim_inputs[:10]}")
+    print(f"dim_inputs sum: {sum(model.band_split.dim_inputs)}")
+    
     def hook(name):
         def fn(module, input, output):
             print(f"{name}: mean={output.mean().item():.6f}, std={output.std().item():.6f}")

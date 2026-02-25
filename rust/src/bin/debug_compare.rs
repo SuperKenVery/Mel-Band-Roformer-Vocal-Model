@@ -3,12 +3,10 @@
 use burn::backend::wgpu::WgpuDevice;
 use burn::backend::Metal;
 use mel_band_roformer::io::wav::read_wav;
-use mel_band_roformer::io::weights::load_config_for_model;
+use mel_band_roformer::InferenceEngine;
 use mel_band_roformer::model::{MelBandRoformer, MelFilterBank};
 use mel_band_roformer::stft::{FftPlan, stft};
 use burn::prelude::*;
-use burn::module::Module;
-use burn_store::{BurnpackStore, ModuleSnapshot};
 use std::path::Path;
 
 type B = Metal;
@@ -24,13 +22,17 @@ fn tensor_stats<const D: usize>(name: &str, t: &Tensor<B, D>) {
 fn main() {
     std::fs::create_dir_all("/tmp/rust_debug").unwrap();
     
-    let model_path = Path::new("./model.bpk");
+    // Use the .ckpt file directly
+    let model_path = Path::new("/Users/bytedance/Downloads/MelBandRoformer.ckpt");
     let config_path = Path::new("../configs/config_vocals_mel_band_roformer.yaml");
     
-    let mut config = load_config_for_model(model_path, Some(config_path)).unwrap();
-    // Disable dropout for deterministic comparison
-    config.attn_dropout = 0.0;
-    config.ff_dropout = 0.0;
+    let device = WgpuDevice::default();
+    
+    // Load model using InferenceEngine which handles .ckpt loading
+    let engine = InferenceEngine::<B>::new(model_path, Some(config_path), &device).unwrap();
+    let model = engine.model();
+    let config = engine.config();
+    
     println!("Config: depth={}, dim={}", config.depth, config.dim);
     
     let mel_filter_bank_check = MelFilterBank::new(
@@ -48,13 +50,6 @@ fn main() {
              println!("WARNING: Band {} has dim_in == dim == {}. Potential weight loading issue!", i, d);
         }
     }
-    
-    let device = WgpuDevice::default();
-    let mut model = MelBandRoformer::<B>::new(&device, config.clone());
-    
-    let mut store = BurnpackStore::from_file(model_path);
-    model.load_from(&mut store).expect("Failed to load model");
-    // model.fix_load_weights();
     
     let (samples, sr) = read_wav(Path::new(
         "/Users/bytedance/Desktop/music-instrumental-extract/inputs/syws.wav"
@@ -95,6 +90,24 @@ fn main() {
     
     // Build x_before_band_split (matching Python's layout)
     let total_freqs = freq_bins * num_channels;
+    
+    // Check BandSplit 0 weights
+    let bs0 = &model.band_split.to_features[0];
+    let gamma = bs0.norm.gamma.val();
+    tensor_stats("BandSplit 0 Norm Gamma", &gamma);
+    
+    let gamma_data: Vec<f32> = gamma.into_data().to_vec().unwrap();
+    let gamma_mean = gamma_data.iter().map(|&x| x as f64).sum::<f64>() / gamma_data.len() as f64;
+    let gamma_std_from_1 = (gamma_data.iter().map(|&x| (x as f64 - 1.0).powi(2)).sum::<f64>() / gamma_data.len() as f64).sqrt();
+    println!("  BandSplit 0 Norm Gamma std (from 1.0): {:.6}", gamma_std_from_1);
+    
+    let weight = bs0.linear.weight.val();
+    tensor_stats("BandSplit 0 Linear Weight", &weight);
+    
+    if let Some(bias) = &bs0.linear.bias {
+        tensor_stats("BandSplit 0 Linear Bias", &bias.val());
+    }
+    
     let mut stft_flat: Vec<f32> = Vec::with_capacity(time_frames * total_freqs * 2);
     for t in 0..time_frames {
         for f in 0..freq_bins {
@@ -123,9 +136,19 @@ fn main() {
     println!("Rust intermediates:");
     tensor_stats("x_before_band_split", &x);
     
+    // Save x_before_band_split
+    let data: Vec<f32> = x.clone().into_data().to_vec().unwrap();
+    let bytes: Vec<u8> = data.iter().flat_map(|f| f.to_le_bytes().to_vec()).collect();
+    std::fs::write("/tmp/rust_debug/x_before_band_split.bin", bytes).unwrap();
+
     // Run band_split directly
     let mut x = model.band_split.forward(x);
     tensor_stats("x_after_band_split", &x);
+
+    // Save x_after_band_split
+    let data: Vec<f32> = x.clone().into_data().to_vec().unwrap();
+    let bytes: Vec<u8> = data.iter().flat_map(|f| f.to_le_bytes().to_vec()).collect();
+    std::fs::write("/tmp/rust_debug/x_after_band_split.bin", bytes).unwrap();
     
     let [batch, time, num_bands, dim] = x.dims();
     

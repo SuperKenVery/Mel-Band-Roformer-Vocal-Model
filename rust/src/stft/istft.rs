@@ -25,7 +25,7 @@ pub fn istft(
     let mut output = vec![vec![0.0f32; reconstructed_len]; num_channels];
     let mut window_sum = vec![0.0f32; reconstructed_len];
 
-    let window_sq: Vec<f32> = plan.window.iter().map(|w| w * w).collect();
+    let window_sq: Vec<f32> = plan.window.iter().map(|w| (w * w) as f32).collect();
 
     for (ch, channel_spec) in spectrogram.iter().enumerate() {
         for frame_idx in 0..num_frames {

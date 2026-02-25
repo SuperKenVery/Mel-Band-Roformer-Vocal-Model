@@ -21,28 +21,53 @@ fn main() {
     let mut store = BurnpackStore::from_file(model_path);
     model.load_from(&mut store).expect("Failed to load model");
     
-    println!("Checking mask_estimator weights:");
+    println!("Checking band_split weights:");
     
-    let me = &model.mask_estimators[0];
-    let band0 = &me.to_freqs[0];
+    // Check first band
+    let band0 = &model.band_split.to_features[0];
     
-    let w1: Vec<f32> = band0.mlp.linear1.weight.val().into_data().to_vec().unwrap();
-    let b1: Vec<f32> = band0.mlp.linear1.bias.as_ref().unwrap().val().into_data().to_vec().unwrap();
+    // Norm Gamma
+    let gamma: Vec<f32> = band0.norm.gamma.val().into_data().to_vec().unwrap();
+    println!("Band 0 Norm Gamma:");
+    println!("  shape: ({},)", band0.norm.gamma.shape().dims[0]);
+    println!("  mean: {:.6}", gamma.iter().map(|&x| x as f64).sum::<f64>() / gamma.len() as f64);
+    println!("  std: {:.6}", (gamma.iter().map(|&x| (x as f64 - 1.0).powi(2)).sum::<f64>() / gamma.len() as f64).sqrt());
     
-    println!("linear1:");
-    println!("  weight shape: ({}, {})", band0.mlp.linear1.weight.shape().dims[0], band0.mlp.linear1.weight.shape().dims[1]);
-    println!("  weight mean: {:.6}", w1.iter().map(|&x| x as f64).sum::<f64>() / w1.len() as f64);
-    println!("  weight std: {:.6}", (w1.iter().map(|&x| (x as f64).powi(2)).sum::<f64>() / w1.len() as f64).sqrt());
-    println!("  bias mean: {:.6}", b1.iter().map(|&x| x as f64).sum::<f64>() / b1.len() as f64);
+    // Linear Weight
+    let w: Vec<f32> = band0.linear.weight.val().into_data().to_vec().unwrap();
+    println!("Band 0 Linear Weight:");
+    println!("  shape: ({}, {})", band0.linear.weight.shape().dims[0], band0.linear.weight.shape().dims[1]);
+    println!("  mean: {:.6}", w.iter().map(|&x| x as f64).sum::<f64>() / w.len() as f64);
+    println!("  std: {:.6}", (w.iter().map(|&x| (x as f64).powi(2)).sum::<f64>() / w.len() as f64).sqrt());
     
-    let w3: Vec<f32> = band0.mlp.linear3.weight.val().into_data().to_vec().unwrap();
-    let b3: Vec<f32> = band0.mlp.linear3.bias.as_ref().unwrap().val().into_data().to_vec().unwrap();
+    // Linear Bias
+    if let Some(bias) = &band0.linear.bias {
+        let b: Vec<f32> = bias.val().into_data().to_vec().unwrap();
+        println!("Band 0 Linear Bias:");
+        println!("  shape: ({},)", bias.shape().dims[0]);
+        println!("  mean: {:.6}", b.iter().map(|&x| x as f64).sum::<f64>() / b.len() as f64);
+    }
     
-    println!("linear3:");
-    println!("  weight shape: ({}, {})", band0.mlp.linear3.weight.shape().dims[0], band0.mlp.linear3.weight.shape().dims[1]);
-    println!("  weight mean: {:.6}", w3.iter().map(|&x| x as f64).sum::<f64>() / w3.len() as f64);
-    println!("  weight std: {:.6}", (w3.iter().map(|&x| (x as f64).powi(2)).sum::<f64>() / w3.len() as f64).sqrt());
-    println!("  bias len: {}", b3.len());
-    println!("  bias mean: {:.6}", b3.iter().map(|&x| x as f64).sum::<f64>() / b3.len() as f64);
-    println!("  bias first 10: {:?}", &b3[..10.min(b3.len())]);
+    // Check last band
+    let band59 = &model.band_split.to_features[59];
+    
+    // Norm Gamma
+    let gamma: Vec<f32> = band59.norm.gamma.val().into_data().to_vec().unwrap();
+    println!("Band 59 Norm Gamma:");
+    println!("  shape: ({},)", band59.norm.gamma.shape().dims[0]);
+    println!("  mean: {:.6}", gamma.iter().map(|&x| x as f64).sum::<f64>() / gamma.len() as f64);
+    
+    // Linear Weight
+    let w: Vec<f32> = band59.linear.weight.val().into_data().to_vec().unwrap();
+    println!("Band 59 Linear Weight:");
+    println!("  shape: ({}, {})", band59.linear.weight.shape().dims[0], band59.linear.weight.shape().dims[1]);
+    println!("  mean: {:.6}", w.iter().map(|&x| x as f64).sum::<f64>() / w.len() as f64);
+    
+    // Linear Bias
+    if let Some(bias) = &band59.linear.bias {
+        let b: Vec<f32> = bias.val().into_data().to_vec().unwrap();
+        println!("Band 59 Linear Bias:");
+        println!("  shape: ({},)", bias.shape().dims[0]);
+        println!("  mean: {:.6}", b.iter().map(|&x| x as f64).sum::<f64>() / b.len() as f64);
+    }
 }

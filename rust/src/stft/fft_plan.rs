@@ -1,24 +1,24 @@
 use realfft::{RealFftPlanner, RealToComplex};
-use rustfft::{FftPlanner, num_complex::Complex};
+use rustfft::{FftPlanner, num_complex::{Complex, Complex32, Complex64}};
 use std::sync::Arc;
 
 pub struct FftPlan {
     pub n_fft: usize,
     pub hop_length: usize,
     pub win_length: usize,
-    pub window: Vec<f32>,
-    r2c: Arc<dyn RealToComplex<f32>>,
-    c2r: Arc<dyn rustfft::Fft<f32>>,
+    pub window: Vec<f64>,
+    r2c: Arc<dyn RealToComplex<f64>>,
+    c2r: Arc<dyn rustfft::Fft<f64>>,
 }
 
 impl FftPlan {
     pub fn new(n_fft: usize, hop_length: usize, win_length: usize) -> Self {
         let window = hann_window(win_length);
 
-        let mut real_planner = RealFftPlanner::<f32>::new();
+        let mut real_planner = RealFftPlanner::<f64>::new();
         let r2c = real_planner.plan_fft_forward(n_fft);
 
-        let mut planner = FftPlanner::<f32>::new();
+        let mut planner = FftPlanner::<f64>::new();
         let c2r = planner.plan_fft_inverse(n_fft);
 
         Self {
@@ -31,12 +31,12 @@ impl FftPlan {
         }
     }
 
-    pub fn forward(&self, frame: &[f32]) -> Vec<Complex<f32>> {
-        let mut input: Vec<f32> = vec![0.0; self.n_fft];
+    pub fn forward(&self, frame: &[f32]) -> Vec<Complex32> {
+        let mut input: Vec<f64> = vec![0.0; self.n_fft];
         let windowed_len = frame.len().min(self.win_length);
 
         for i in 0..windowed_len {
-            input[i] = frame[i] * self.window[i];
+            input[i] = (frame[i] as f64) * self.window[i];
         }
 
         let mut spectrum = self.r2c.make_output_vec();
@@ -45,26 +45,29 @@ impl FftPlan {
             .expect("FFT forward failed");
 
         spectrum
+            .iter()
+            .map(|c| Complex32::new(c.re as f32, c.im as f32))
+            .collect()
     }
 
-    pub fn inverse(&self, spectrum: &[Complex<f32>]) -> Vec<f32> {
-        let mut full_spectrum: Vec<Complex<f32>> = vec![Complex::new(0.0, 0.0); self.n_fft];
+    pub fn inverse(&self, spectrum: &[Complex32]) -> Vec<f32> {
+        let mut full_spectrum: Vec<Complex64> = vec![Complex::new(0.0, 0.0); self.n_fft];
 
         for (i, &val) in spectrum.iter().enumerate() {
-            full_spectrum[i] = val;
+            full_spectrum[i] = Complex::new(val.re as f64, val.im as f64);
         }
         for i in 1..(self.n_fft / 2) {
-            full_spectrum[self.n_fft - i] = spectrum[i].conj();
+            full_spectrum[self.n_fft - i] = full_spectrum[i].conj();
         }
 
         self.c2r.process(&mut full_spectrum);
 
-        let scale = 1.0 / self.n_fft as f32;
+        let scale = 1.0 / self.n_fft as f64;
         full_spectrum
             .iter()
             .take(self.win_length)
             .enumerate()
-            .map(|(i, c)| c.re * scale * self.window[i])
+            .map(|(i, c)| (c.re * scale * self.window[i]) as f32)
             .collect()
     }
 
@@ -81,12 +84,12 @@ impl FftPlan {
     }
 }
 
-fn hann_window(length: usize) -> Vec<f32> {
+fn hann_window(length: usize) -> Vec<f64> {
     // Match PyTorch default periodic=True
     // sin^2(pi * n / L)
     (0..length)
         .map(|i| {
-            let x = std::f32::consts::PI * i as f32 / length as f32;
+            let x = std::f64::consts::PI * i as f64 / length as f64;
             (x.sin()).powi(2)
         })
         .collect()
@@ -113,9 +116,9 @@ mod tests {
         let output = plan.inverse(&spectrum);
 
         for i in 0..input.len() {
-            let expected = input[i] * plan.window[i] * plan.window[i];
+            let expected = input[i] as f64 * plan.window[i] * plan.window[i];
             assert!(
-                (output[i] - expected).abs() < 1e-4,
+                (output[i] as f64 - expected).abs() < 1e-4,
                 "Mismatch at {}: {} vs {}",
                 i,
                 output[i],

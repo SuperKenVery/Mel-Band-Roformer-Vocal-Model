@@ -6,8 +6,8 @@ use burn::tensor::backend::Backend;
 
 #[derive(Module, Debug)]
 pub struct BandSplitLayer<B: Backend> {
-    norm: RmsNorm<B>,
-    linear: Linear<B>,
+    pub norm: RmsNorm<B>,
+    pub linear: Linear<B>,
 }
 
 impl<B: Backend> BandSplitLayer<B> {
@@ -26,8 +26,8 @@ impl<B: Backend> BandSplitLayer<B> {
 
 #[derive(Module, Debug)]
 pub struct BandSplit<B: Backend> {
-    to_features: Vec<BandSplitLayer<B>>,
-    dim_inputs: Vec<usize>,
+    pub to_features: Vec<BandSplitLayer<B>>,
+    pub dim_inputs: Vec<usize>,
 }
 
 impl<B: Backend> BandSplit<B> {
