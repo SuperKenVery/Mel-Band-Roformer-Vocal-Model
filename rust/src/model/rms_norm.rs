@@ -5,7 +5,7 @@ use burn::tensor::backend::Backend;
 
 #[derive(Module, Debug)]
 pub struct RmsNorm<B: Backend> {
-    gamma: Param<Tensor<B, 1>>,
+    pub gamma: Param<Tensor<B, 1>>,
     scale: f32,
     dim: usize,
 }
@@ -36,10 +36,10 @@ impl<B: Backend> RmsNorm<B> {
 
 fn l2_normalize_last_dim<B: Backend, const D: usize>(x: Tensor<B, D>) -> Tensor<B, D> {
     // Match PyTorch F.normalize(x, dim=-1) which divides by L2 norm
-    let eps = 1e-8;
+    let eps = 1e-12;
     let squared = x.clone().powf_scalar(2.0);
     let sum_squared = squared.sum_dim(D - 1);  // sum, not mean
-    let l2_norm = (sum_squared + eps).sqrt();
+    let l2_norm = sum_squared.sqrt().clamp_min(eps);
     x / l2_norm
 }
 

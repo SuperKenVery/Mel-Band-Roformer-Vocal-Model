@@ -16,7 +16,7 @@ name = "mel_band_roformer"
 path = "src/lib.rs"
 
 [dependencies]
-burn = { path = "/Users/bytedance/Projects/burn/crates/burn", features = ["wgpu", "ndarray", "metal"] }
+burn = { path = "/Users/bytedance/Projects/burn/crates/burn", features = ["wgpu", "ndarray", "metal", "store"] }
 burn-ndarray = { path = "/Users/bytedance/Projects/burn/crates/burn-ndarray" }
 burn-store = { path = "/Users/bytedance/Projects/burn/crates/burn-store", features = ["pytorch", "burnpack"] }
 hound = "3.5"

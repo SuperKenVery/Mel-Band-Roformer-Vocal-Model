@@ -86,6 +86,7 @@ impl<B: Backend> MaskEstimator<B> {
                 .reshape([batch * time, dim]);
 
             let band_output = layer.forward(band_input);
+
             let band_output = band_output.reshape([batch, time, dim_out]);
 
             output = output.slice_assign(

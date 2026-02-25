@@ -82,10 +82,12 @@ impl FftPlan {
 }
 
 fn hann_window(length: usize) -> Vec<f32> {
+    // Match PyTorch default periodic=True
+    // sin^2(pi * n / L)
     (0..length)
         .map(|i| {
-            let x = std::f32::consts::PI * i as f32 / (length - 1) as f32;
-            x.sin().powi(2)
+            let x = std::f32::consts::PI * i as f32 / length as f32;
+            (x.sin()).powi(2)
         })
         .collect()
 }
@@ -98,9 +100,9 @@ mod tests {
     fn test_hann_window() {
         let window = hann_window(4);
         assert!((window[0] - 0.0).abs() < 1e-6);
-        assert!((window[1] - 0.75).abs() < 1e-6);
-        assert!((window[2] - 0.75).abs() < 1e-6);
-        assert!((window[3] - 0.0).abs() < 1e-6);
+        assert!((window[1] - 0.5).abs() < 1e-6);
+        assert!((window[2] - 1.0).abs() < 1e-6);
+        assert!((window[3] - 0.5).abs() < 1e-6);
     }
 
     #[test]

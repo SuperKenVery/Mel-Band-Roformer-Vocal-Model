@@ -38,8 +38,40 @@ impl<B: Backend> TransformerBlock<B> {
         let freqs: Vec<f32> = self.rotary_freqs.val().to_data().to_vec().unwrap();
         let rotary = RotaryEmbedding::from_freqs(freqs);
 
-        let x = self.attention.forward(x.clone(), Some(&rotary)) + x;
-        let x = self.ff.forward(x.clone()) + x;
+        let x_attn = self.attention.forward(x.clone(), Some(&rotary));
+        
+        // Debug print
+        let data: Vec<f32> = x_attn.clone().into_data().to_vec().unwrap();
+        let n = data.len() as f64;
+        let mean: f64 = data.iter().map(|&v| v as f64).sum::<f64>() / n;
+        let std: f64 = (data.iter().map(|&v| (v as f64 - mean).powi(2)).sum::<f64>() / n).sqrt();
+        println!("    Attn: mean={:.6}, std={:.6}", mean, std);
+
+        let x = x_attn + x;
+        let x_ff = self.ff.forward(x.clone());
+
+        // Debug print
+         let data: Vec<f32> = x_ff.clone().into_data().to_vec().unwrap();
+         let n = data.len() as f64;
+         let mean: f64 = data.iter().map(|&v| v as f64).sum::<f64>() / n;
+         let std: f64 = (data.iter().map(|&v| (v as f64 - mean).powi(2)).sum::<f64>() / n).sqrt();
+         println!("    FF: mean={:.6}, std={:.6}", mean, std);
+         
+         let [b, s, d] = x_ff.dims();
+         if b == 801 && s == 60 {
+             if !std::path::Path::new("/tmp/rust_debug/layer0_freq_ff.bin").exists() {
+                  let bytes: Vec<u8> = data.iter().flat_map(|f| f.to_le_bytes().to_vec()).collect();
+                  std::fs::write("/tmp/rust_debug/layer0_freq_ff.bin", bytes).unwrap();
+             }
+         }
+         if b == 60 && s == 801 {
+             if !std::path::Path::new("/tmp/rust_debug/layer0_time_ff.bin").exists() {
+                  let bytes: Vec<u8> = data.iter().flat_map(|f| f.to_le_bytes().to_vec()).collect();
+                  std::fs::write("/tmp/rust_debug/layer0_time_ff.bin", bytes).unwrap();
+             }
+         }
+
+         let x = x_ff + x;
         x
     }
 }
@@ -77,7 +109,27 @@ impl<B: Backend> Transformer<B> {
         for layer in &self.layers {
             x = layer.forward(x);
         }
-        self.norm.forward(x)
+        let x_norm = self.norm.forward(x);
+        
+        let [b, s, _d] = x_norm.dims();
+        // Time Transformer Output
+        if b == 60 && s == 801 {
+             let data: Vec<f32> = x_norm.clone().into_data().to_vec().unwrap();
+             if !std::path::Path::new("/tmp/rust_debug/layer0_time_output.bin").exists() {
+                  let bytes: Vec<u8> = data.iter().flat_map(|f: &f32| f.to_le_bytes().to_vec()).collect();
+                  std::fs::write("/tmp/rust_debug/layer0_time_output.bin", bytes).unwrap();
+             }
+             
+             // Save Gamma
+             let gamma = self.norm.gamma.val();
+             let data: Vec<f32> = gamma.clone().into_data().to_vec().unwrap();
+             if !std::path::Path::new("/tmp/rust_debug/layer0_time_norm_gamma.bin").exists() {
+                  let bytes: Vec<u8> = data.iter().flat_map(|f: &f32| f.to_le_bytes().to_vec()).collect();
+                  std::fs::write("/tmp/rust_debug/layer0_time_norm_gamma.bin", bytes).unwrap();
+             }
+        }
+        
+        x_norm
     }
 }
 

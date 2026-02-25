@@ -30,6 +30,82 @@ def dump_intermediates(audio_path, model_path, config_path, output_dir="/tmp/pyt
     print(f"Input shape: {raw_audio.shape}")
     np.save(f"{output_dir}/input.npy", raw_audio.numpy())
     
+    def hook(name):
+        def fn(module, input, output):
+            print(f"{name}: mean={output.mean().item():.6f}, std={output.std().item():.6f}")
+            if name == "Layer 0 Freq 0 FF":
+                np.save(f"{output_dir}/layer0_freq_ff.npy", output.cpu().numpy())
+            if name == "Layer 0 Time 0 FF":
+                np.save(f"{output_dir}/layer0_time_ff.npy", output.cpu().numpy())
+            if name == "Layer 0 Freq 0 FF Linear1":
+                np.save(f"{output_dir}/layer0_freq_ff_linear1.npy", output.cpu().numpy())
+            if name == "Layer 0 Freq 0 FF Norm":
+                np.save(f"{output_dir}/layer0_freq_ff_norm.npy", output.cpu().numpy())
+            if name == "Layer 0 Freq 0 Attn":
+                np.save(f"{output_dir}/layer0_freq_attn.npy", output.cpu().numpy())
+            if name == "Layer 0 Time 0 Attn":
+                np.save(f"{output_dir}/layer0_time_attn.npy", output.cpu().numpy())
+            if name == "Layer 0 Freq 0 Attn Norm":
+                np.save(f"{output_dir}/layer0_freq_attn_norm.npy", output.cpu().numpy())
+            if name == "Layer 0 Freq 0 Attn to_qkv":
+                np.save(f"{output_dir}/layer0_freq_attn_to_qkv.npy", output.cpu().numpy())
+        return fn
+
+    for i, (time_transformer, freq_transformer) in enumerate(model.layers):
+        # Time Transformer
+        for j, layer in enumerate(time_transformer.layers):
+            attn, ff = layer
+            attn.register_forward_hook(hook(f"Layer {i} Time {j} Attn"))
+            
+            # Print QKV weight stats
+            w = attn.to_qkv.weight
+            print(f"Layer {i} Time {j} Attn QKV Weight: shape={w.shape}, mean={w.mean().item():.6f}, std={w.std().item():.6f}")
+
+            # Print Norm Gamma
+            g = attn.norm.gamma
+            print(f"Layer {i} Time {j} Attn Norm Gamma: shape={g.shape}, mean={g.mean().item():.6f}, std={g.std().item():.6f}")
+
+            ff.register_forward_hook(hook(f"Layer {i} Time {j} FF"))
+        
+        # Freq Transformer
+        for j, layer in enumerate(freq_transformer.layers):
+            attn, ff = layer
+            attn.register_forward_hook(hook(f"Layer {i} Freq {j} Attn"))
+            
+            # Hook Attn Norm and to_qkv
+            attn.norm.register_forward_hook(hook(f"Layer {i} Freq {j} Attn Norm"))
+            attn.to_qkv.register_forward_hook(hook(f"Layer {i} Freq {j} Attn to_qkv"))
+            
+            # Print QKV weight stats
+            w = attn.to_qkv.weight
+            print(f"Layer {i} Freq {j} Attn QKV Weight: shape={w.shape}, mean={w.mean().item():.6f}, std={w.std().item():.6f}")
+
+            # Print Out weight stats
+            w = attn.to_out[0].weight
+            print(f"Layer {i} Freq {j} Attn Out Weight: shape={w.shape}, mean={w.mean().item():.6f}, std={w.std().item():.6f}")
+
+            # Print FF Linear1 bias
+            b = ff.net[1].bias
+            print(f"Layer {i} Freq {j} FF Linear1 Bias: shape={b.shape}, mean={b.mean().item():.6f}, std={b.std().item():.6f}")
+
+            ff.register_forward_hook(hook(f"Layer {i} Freq {j} FF"))
+            # Hook linear1 of FF
+            # ff is FeedForward, which has .net
+            # net[1] is linear1
+            # print(f"FF type: {type(ff)}")
+            # Hook RMSNorm of FF
+            if hasattr(ff, "net"):
+                ff.net[0].register_forward_hook(hook(f"Layer {i} Freq {j} FF Norm"))
+                
+            if hasattr(ff, "net"):
+                ff.net[1].register_forward_hook(hook(f"Layer {i} Freq {j} FF Linear1"))
+                
+                # Print weight stats
+                w = ff.net[1].weight
+                print(f"Layer {i} Freq {j} FF Linear1 Weight: shape={w.shape}, mean={w.mean().item():.6f}, std={w.std().item():.6f}")
+            else:
+                print(f"FF has no net attribute: {ff}")
+
     with torch.no_grad():
         device = raw_audio.device
         

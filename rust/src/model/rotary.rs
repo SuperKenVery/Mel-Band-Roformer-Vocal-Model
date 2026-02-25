@@ -43,20 +43,32 @@ impl RotaryEmbedding {
 
         let cos = freqs.clone().cos();
         let sin = freqs.sin();
-
+        
         let cos: Tensor<B, 4> = cos.unsqueeze_dim::<3>(0).unsqueeze_dim::<4>(0);
         let sin: Tensor<B, 4> = sin.unsqueeze_dim::<3>(0).unsqueeze_dim::<4>(0);
 
         let cos = cos.expand([batch, heads, seq_len, dim / 2]);
         let sin = sin.expand([batch, heads, seq_len, dim / 2]);
 
-        let x1 = x.clone().slice([0..batch, 0..heads, 0..seq_len, 0..dim / 2]);
-        let x2 = x.slice([0..batch, 0..heads, 0..seq_len, dim / 2..dim]);
+        // Reshape x to [batch, heads, seq_len, dim/2, 2] to separate interleaved pairs
+        let x_reshaped = x.reshape([batch, heads, seq_len, dim / 2, 2]);
+
+        // x1 is evens (index 0), x2 is odds (index 1)
+        let x1 = x_reshaped.clone().slice([0..batch, 0..heads, 0..seq_len, 0..dim / 2, 0..1])
+            .reshape([batch, heads, seq_len, dim / 2]);
+        let x2 = x_reshaped.slice([0..batch, 0..heads, 0..seq_len, 0..dim / 2, 1..2])
+            .reshape([batch, heads, seq_len, dim / 2]);
 
         let rotated_x1 = x1.clone() * cos.clone() - x2.clone() * sin.clone();
         let rotated_x2 = x1 * sin + x2 * cos;
 
-        Tensor::cat(vec![rotated_x1, rotated_x2], 3)
+        // Stack back: [batch, heads, seq_len, dim/2, 2]
+        let rotated_x1 = rotated_x1.unsqueeze_dim::<5>(4);
+        let rotated_x2 = rotated_x2.unsqueeze_dim::<5>(4);
+        let rotated = Tensor::cat(vec![rotated_x1, rotated_x2], 4);
+
+        // Reshape back to [batch, heads, seq_len, dim]
+        rotated.reshape([batch, heads, seq_len, dim])
     }
 }
 

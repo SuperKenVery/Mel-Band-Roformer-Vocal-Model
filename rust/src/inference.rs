@@ -41,6 +41,7 @@ impl<B: Backend> InferenceEngine<B> {
                 model.load_from(&mut store).map_err(|e| {
                     InferenceError::LoadError(format!("Failed to load burn model: {:?}", e))
                 })?;
+                // model.fix_load_weights(); // Weights in Burn format should already be correct
             }
             WeightFormat::Pytorch => {
                 let mut store = PytorchStore::from_file(model_path)
@@ -63,6 +64,7 @@ impl<B: Backend> InferenceEngine<B> {
                 model.load_from(&mut store).map_err(|e| {
                     InferenceError::LoadError(format!("Failed to load pytorch model: {:?}", e))
                 })?;
+                model.fix_load_weights();
             }
         }
 

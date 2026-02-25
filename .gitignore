@@ -6,3 +6,12 @@ __pycache__/
 .direnv/
 target/
 
+*.bpk
+*.mpk
+*.pt
+*.txt
+*.npy
+*.safetensors
+
+.trae/specs/
+

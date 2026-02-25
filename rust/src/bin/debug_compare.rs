@@ -27,7 +27,10 @@ fn main() {
     let model_path = Path::new("./model.bpk");
     let config_path = Path::new("../configs/config_vocals_mel_band_roformer.yaml");
     
-    let config = load_config_for_model(model_path, Some(config_path)).unwrap();
+    let mut config = load_config_for_model(model_path, Some(config_path)).unwrap();
+    // Disable dropout for deterministic comparison
+    config.attn_dropout = 0.0;
+    config.ff_dropout = 0.0;
     println!("Config: depth={}, dim={}", config.depth, config.dim);
     
     let mel_filter_bank_check = MelFilterBank::new(
@@ -40,11 +43,18 @@ fn main() {
     println!("freqs_per_bands first 10: {:?}", &freqs_per_bands[..10]);
     println!("freqs_per_bands total: {}", freqs_per_bands.iter().sum::<usize>());
     
+    for (i, &d) in freqs_per_bands.iter().enumerate() {
+        if d == config.dim {
+             println!("WARNING: Band {} has dim_in == dim == {}. Potential weight loading issue!", i, d);
+        }
+    }
+    
     let device = WgpuDevice::default();
     let mut model = MelBandRoformer::<B>::new(&device, config.clone());
     
     let mut store = BurnpackStore::from_file(model_path);
     model.load_from(&mut store).expect("Failed to load model");
+    // model.fix_load_weights();
     
     let (samples, sr) = read_wav(Path::new(
         "/Users/bytedance/Desktop/music-instrumental-extract/inputs/syws.wav"
@@ -114,10 +124,52 @@ fn main() {
     tensor_stats("x_before_band_split", &x);
     
     // Run band_split directly
-    // Access it via reflection through model... actually we can't easily do this in Rust
-    // Let me just run the full forward but with debug output added
+    let mut x = model.band_split.forward(x);
+    tensor_stats("x_after_band_split", &x);
     
-    // Run full model forward pass
+    let [batch, time, num_bands, dim] = x.dims();
+    
+    for (i, (time_transformer, freq_transformer)) in
+        model.time_transformers.iter().zip(model.freq_transformers.iter()).enumerate()
+    {
+        let x_time = x.clone().swap_dims(1, 2);
+        let x_time = x_time.reshape([batch * num_bands, time, dim]);
+        let x_time = time_transformer.forward(x_time);
+        let x_time = x_time.reshape([batch, num_bands, time, dim]);
+        x = x_time.swap_dims(1, 2);
+
+        let x_freq = x.clone().reshape([batch * time, num_bands, dim]);
+        let x_freq = freq_transformer.forward(x_freq);
+        x = x_freq.reshape([batch, time, num_bands, dim]);
+        
+        println!("After layer {}:", i);
+        tensor_stats(&format!("x_after_layer_{}", i), &x);
+        
+        if i == 0 {
+             let data: Vec<f32> = x.clone().into_data().to_vec().unwrap();
+             // Save as raw f32 bytes
+             let bytes: Vec<u8> = data.iter().flat_map(|f| f.to_le_bytes().to_vec()).collect();
+             std::fs::write("/tmp/rust_debug/x_after_layer_0.bin", bytes).unwrap();
+        }
+    }
+    
+    tensor_stats("x_before_mask", &x);
+
+    let num_stems = model.mask_estimators.len();
+    let mut all_masks: Vec<Tensor<B, 3>> = Vec::with_capacity(num_stems);
+
+    for (i, mask_estimator) in model.mask_estimators.iter().enumerate() {
+        let mask = mask_estimator.forward(x.clone());
+        tensor_stats(&format!("mask_{}", i), &mask);
+        all_masks.push(mask);
+    }
+    
+    // Reconstruct output (simplified for single stem/batch if needed, or full logic)
+    // We can just call model.forward(&chunk) for the final output as before, 
+    // or reimplement the scattering logic here to verify that part too.
+    // For now, let's stick to checking if the divergence happens before masks.
+    
+    // Run full model forward pass to compare final output
     let output = model.forward(&chunk);
     
     println!("Rust single-chunk output:");
