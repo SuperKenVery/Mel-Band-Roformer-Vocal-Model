@@ -1,0 +1,10 @@
+.direnv/
+__pycache__/
+target/
+*.safetensors
+*.bpk
+*.pt
+*.npy
+.trae/specs/
+.pixi/*
+

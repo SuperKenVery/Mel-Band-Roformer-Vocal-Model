@@ -1,0 +1,26 @@
+[workspace]
+authors = ["ken <39673849+SuperKenVery@users.noreply.github.com>"]
+channels = ["conda-forge"]
+name = "Mel-Band-Roformer-Vocal-Model"
+platforms = ["osx-arm64"]
+version = "0.1.0"
+
+[tasks]
+
+[dependencies]
+python = "3.12.*"
+
+[pypi-dependencies]
+torch = ">=2.0.1"
+numpy = "*"
+pandas = "*"
+soundfile = "*"
+ml-collections = "*"
+tqdm = "*"
+segmentation-models-pytorch = "==0.3.3"
+timm = "==0.9.2"
+omegaconf = "==2.2.3"
+beartype = "==0.14.1"
+rotary-embedding-torch = "==0.3.5"
+einops = "==0.6.1"
+librosa = "*"
