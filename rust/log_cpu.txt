@@ -1,0 +1,134 @@
+warning: unused imports: `AutodiffBackend`, `AutodiffModule`, `ModuleMapper`, `ModuleVisitor`, `PrecisionSettings`, and `Record`
+ --> src/model/mel_band_roformer.rs:3:29
+  |
+3 |     module::{Module, Param, AutodiffModule, ModuleMapper, ModuleVisitor},
+  |                             ^^^^^^^^^^^^^^  ^^^^^^^^^^^^  ^^^^^^^^^^^^^
+...
+6 |     tensor::{backend::{Backend, AutodiffBackend}, Tensor, Int},
+  |                                 ^^^^^^^^^^^^^^^
+7 |     record::{Record, PrecisionSettings},
+  |              ^^^^^^  ^^^^^^^^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `ParamId`
+ --> src/model/helper.rs:2:38
+  |
+2 |     module::{Module, AutodiffModule, ParamId, ModuleVisitor, ModuleMapper, ModuleDisplay, ModuleDisplayDefault, DisplaySettings},
+  |                                      ^^^^^^^
+
+warning: unused import: `Serialize`
+ --> src/model/mel_band_roformer.rs:9:13
+  |
+9 | use serde::{Serialize, Deserialize};
+  |             ^^^^^^^^^
+
+warning: unused import: `Deserialize`
+ --> src/model/mel_band_roformer.rs:9:24
+  |
+9 | use serde::{Serialize, Deserialize};
+  |                        ^^^^^^^^^^^
+
+warning: unused variable: `num_total`
+   --> src/model/mel_band_roformer.rs:347:13
+    |
+347 |         let num_total = self.freq_selection_matrix.dims()[1];
+    |             ^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_num_total`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: `melband_roformer` (lib) generated 5 warnings (run `cargo fix --lib -p melband_roformer` to apply 3 suggestions)
+   Compiling melband_roformer v0.1.0 (/Users/bytedance/Projects/melband-roformer-worktrees/ralph-with-review-agent/rust)
+warning: unused imports: `WgpuDevice` and `Wgpu`
+ --> src/bin/model_test.rs:7:17
+  |
+7 | use burn_wgpu::{Wgpu, WgpuDevice};
+  |                 ^^^^  ^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: `melband_roformer` (bin "model_test") generated 1 warning (run `cargo fix --bin "model_test" -p melband_roformer` to apply 1 suggestion)
+    Finished `release` profile [optimized] target(s) in 6.59s
+     Running `target/release/model_test`
+Running with BandMaskEstimator fix
+Using NdArray (CPU) backend
+Loading audio...
+Resampling from 48000 to 44100
+Audio loaded: 221088 samples, 2 channels, 44100 Hz
+Input tensor mean: -0.000046372614
+Loading constants...
+STFT kernel real mean: 0.00024391686
+Initializing model...
+stft_kernel_real dims: [1025, 1, 2048]
+freq_indices dims: [3958]
+dim_inputs[0]=132, num_bands=60, num_selected=1979
+MLP::new: dims.len()=4, depth=2, dim_in=384, dim_out=264
+MLP::new: dims.len()=4, depth=2, dim_in=384, dim_out=264
+MLP::new: dims.len()=4, depth=2, dim_in=384, dim_out=264
+MLP::new: dims.len()=4, depth=2, dim_in=384, dim_out=264
+MLP::new: dims.len()=4, depth=2, dim_in=384, dim_out=264
+MLP::new: dims.len()=4, depth=2, dim_in=384, dim_out=264
+MLP::new: dims.len()=4, depth=2, dim_in=384, dim_out=264
+MLP::new: dims.len()=4, depth=2, dim_in=384, dim_out=264
+MLP::new: dims.len()=4, depth=2, dim_in=384, dim_out=264
+MLP::new: dims.len()=4, depth=2, dim_in=384, dim_out=264
+MLP::new: dims.len()=4, depth=2, dim_in=384, dim_out=264
+MLP::new: dims.len()=4, depth=2, dim_in=384, dim_out=264
+MLP::new: dims.len()=4, depth=2, dim_in=384, dim_out=264
+MLP::new: dims.len()=4, depth=2, dim_in=384, dim_out=264
+MLP::new: dims.len()=4, depth=2, dim_in=384, dim_out=264
+MLP::new: dims.len()=4, depth=2, dim_in=384, dim_out=264
+MLP::new: dims.len()=4, depth=2, dim_in=384, dim_out=264
+MLP::new: dims.len()=4, depth=2, dim_in=384, dim_out=264
+MLP::new: dims.len()=4, depth=2, dim_in=384, dim_out=264
+MLP::new: dims.len()=4, depth=2, dim_in=384, dim_out=264
+MLP::new: dims.len()=4, depth=2, dim_in=384, dim_out=264
+MLP::new: dims.len()=4, depth=2, dim_in=384, dim_out=264
+MLP::new: dims.len()=4, depth=2, dim_in=384, dim_out=264
+MLP::new: dims.len()=4, depth=2, dim_in=384, dim_out=264
+MLP::new: dims.len()=4, depth=2, dim_in=384, dim_out=264
+MLP::new: dims.len()=4, depth=2, dim_in=384, dim_out=264
+MLP::new: dims.len()=4, depth=2, dim_in=384, dim_out=264
+MLP::new: dims.len()=4, depth=2, dim_in=384, dim_out=264
+MLP::new: dims.len()=4, depth=2, dim_in=384, dim_out=264
+MLP::new: dims.len()=4, depth=2, dim_in=384, dim_out=264
+MLP::new: dims.len()=4, depth=2, dim_in=384, dim_out=264
+MLP::new: dims.len()=4, depth=2, dim_in=384, dim_out=264
+MLP::new: dims.len()=4, depth=2, dim_in=384, dim_out=264
+MLP::new: dims.len()=4, depth=2, dim_in=384, dim_out=264
+MLP::new: dims.len()=4, depth=2, dim_in=384, dim_out=264
+MLP::new: dims.len()=4, depth=2, dim_in=384, dim_out=264
+MLP::new: dims.len()=4, depth=2, dim_in=384, dim_out=264
+MLP::new: dims.len()=4, depth=2, dim_in=384, dim_out=264
+MLP::new: dims.len()=4, depth=2, dim_in=384, dim_out=264
+MLP::new: dims.len()=4, depth=2, dim_in=384, dim_out=264
+MLP::new: dims.len()=4, depth=2, dim_in=384, dim_out=264
+MLP::new: dims.len()=4, depth=2, dim_in=384, dim_out=264
+MLP::new: dims.len()=4, depth=2, dim_in=384, dim_out=264
+MLP::new: dims.len()=4, depth=2, dim_in=384, dim_out=264
+MLP::new: dims.len()=4, depth=2, dim_in=384, dim_out=264
+MLP::new: dims.len()=4, depth=2, dim_in=384, dim_out=264
+MLP::new: dims.len()=4, depth=2, dim_in=384, dim_out=264
+MLP::new: dims.len()=4, depth=2, dim_in=384, dim_out=264
+MLP::new: dims.len()=4, depth=2, dim_in=384, dim_out=264
+MLP::new: dims.len()=4, depth=2, dim_in=384, dim_out=264
+MLP::new: dims.len()=4, depth=2, dim_in=384, dim_out=264
+MLP::new: dims.len()=4, depth=2, dim_in=384, dim_out=264
+MLP::new: dims.len()=4, depth=2, dim_in=384, dim_out=264
+MLP::new: dims.len()=4, depth=2, dim_in=384, dim_out=264
+MLP::new: dims.len()=4, depth=2, dim_in=384, dim_out=264
+MLP::new: dims.len()=4, depth=2, dim_in=384, dim_out=264
+MLP::new: dims.len()=4, depth=2, dim_in=384, dim_out=264
+MLP::new: dims.len()=4, depth=2, dim_in=384, dim_out=264
+MLP::new: dims.len()=4, depth=2, dim_in=384, dim_out=264
+MLP::new: dims.len()=4, depth=2, dim_in=384, dim_out=256
+Loading weights...
+Running inference...
+DEBUG: x_padded mean: -0.000045946992
+DEBUG: stft real mean: -0.000020028003
+DEBUG: Spec mean: -0.000016791928
+DEBUG: Spec selected mean: -0.000031256943
+DEBUG: BandSplit output mean: 0.002625959
+Output vocals mean: 0.00000008475427, max: 0.025716873
+Saving audio...
+Processing complete. Output saved to output.wav

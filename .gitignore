@@ -7,4 +7,5 @@ target/
 *.npy
 .trae/specs/
 .pixi/*
+*.wav
 

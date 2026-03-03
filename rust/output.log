@@ -1,0 +1,2106 @@
+warning: unused import: `Record`
+  --> src/bin/model_test.rs:11:20
+   |
+11 | use burn::record::{Record, Recorder, FullPrecisionSettings};
+   |                    ^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: use of deprecated unit variant `burn_wgpu::WgpuDevice::BestAvailable`
+  --> src/bin/model_test.rs:17:30
+   |
+17 |     let device = WgpuDevice::BestAvailable;
+   |                              ^^^^^^^^^^^^^
+   |
+   = note: `#[warn(deprecated)]` on by default
+
+warning: unused variable: `sample_rate`
+  --> src/bin/model_test.rs:29:9
+   |
+29 |     let sample_rate = 44100;
+   |         ^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_sample_rate`
+   |
+   = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: `melband_roformer` (bin "model_test") generated 3 warnings (run `cargo fix --bin "model_test" -p melband_roformer` to apply 2 suggestions)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 1.81s
+     Running `target/debug/model_test`
+Loading audio...
+Loaded 27267840 samples at 48000 Hz, 2 channels
+Resampling from 48000 to 44100...
+Slicing audio from 35s to 40s...
+Loading constants...
+Initializing model...
+dim_inputs[0]=28, num_bands=60, num_selected=1979
+Loading weights...
+Running inference...
+DEBUG: x_padded mean: 0.000008088373
+DEBUG: stft_conv_real weight mean: 0.00024391686
+DEBUG: stft real mean: -0.000004259489
+DEBUG: Spec mean: -0.000008458378, max: 145.45311
+DEBUG: Spec selected mean: 0.0000020803222, max: 145.45311
+DEBUG: BandSplit output mean: 0.0028455334, max: 7.9992304
+DEBUG: num_bands_per_freq max: 2
+MaskEstimator input x - mean: Tensor {
+  data:
+[0.022907605],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}, max: Tensor {
+  data:
+[4.1784997],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}
+Band 0 MLP output x_out - mean: Tensor {
+  data:
+[-6.040918],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}, max: Tensor {
+  data:
+[1.5918196],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}
+Band 0 Final output out - mean: Tensor {
+  data:
+[0.002567952],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}, max: Tensor {
+  data:
+[0.16783701],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}
+Band 1 MLP output x_out - mean: Tensor {
+  data:
+[-5.6097684],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}, max: Tensor {
+  data:
+[1.1041304],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}
+Band 1 Final output out - mean: Tensor {
+  data:
+[1.5234652e-6],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}, max: Tensor {
+  data:
+[3.461229e-5],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}
+Band 2 MLP output x_out - mean: Tensor {
+  data:
+[-5.165339],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}, max: Tensor {
+  data:
+[1.2842121],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}
+Band 2 Final output out - mean: Tensor {
+  data:
+[-1.0455161e-6],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}, max: Tensor {
+  data:
+[0.00013580082],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}
+Band 3 MLP output x_out - mean: Tensor {
+  data:
+[-4.982005],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}, max: Tensor {
+  data:
+[1.0587394],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}
+Band 3 Final output out - mean: Tensor {
+  data:
+[4.3090095e-6],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}, max: Tensor {
+  data:
+[0.00019198775],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}
+Band 4 MLP output x_out - mean: Tensor {
+  data:
+[-4.748157],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}, max: Tensor {
+  data:
+[1.0110985],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}
+Band 4 Final output out - mean: Tensor {
+  data:
+[3.5084465e-6],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}, max: Tensor {
+  data:
+[0.00015703122],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}
+Band 5 MLP output x_out - mean: Tensor {
+  data:
+[-4.8491607],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}, max: Tensor {
+  data:
+[1.1040882],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}
+Band 5 Final output out - mean: Tensor {
+  data:
+[-3.8076694e-6],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}, max: Tensor {
+  data:
+[0.00014994582],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}
+Band 6 MLP output x_out - mean: Tensor {
+  data:
+[-4.757406],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}, max: Tensor {
+  data:
+[2.4754171],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}
+Band 6 Final output out - mean: Tensor {
+  data:
+[-4.630987e-6],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}, max: Tensor {
+  data:
+[0.00012768265],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}
+Band 7 MLP output x_out - mean: Tensor {
+  data:
+[-4.829102],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}, max: Tensor {
+  data:
+[1.107489],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}
+Band 7 Final output out - mean: Tensor {
+  data:
+[2.0687885e-6],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}, max: Tensor {
+  data:
+[0.00034546098],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}
+Band 8 MLP output x_out - mean: Tensor {
+  data:
+[-4.807816],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}, max: Tensor {
+  data:
+[1.4520181],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}
+Band 8 Final output out - mean: Tensor {
+  data:
+[-9.031164e-7],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}, max: Tensor {
+  data:
+[0.00023865706],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}
+Band 9 MLP output x_out - mean: Tensor {
+  data:
+[-4.7377405],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}, max: Tensor {
+  data:
+[1.4276475],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}
+Band 9 Final output out - mean: Tensor {
+  data:
+[6.931306e-6],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}, max: Tensor {
+  data:
+[0.00026876415],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}
+Band 10 MLP output x_out - mean: Tensor {
+  data:
+[-4.7666326],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}, max: Tensor {
+  data:
+[1.1293901],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}
+Band 10 Final output out - mean: Tensor {
+  data:
+[8.194919e-6],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}, max: Tensor {
+  data:
+[0.0001784248],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}
+Band 11 MLP output x_out - mean: Tensor {
+  data:
+[-4.6521077],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}, max: Tensor {
+  data:
+[1.7087431],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}
+Band 11 Final output out - mean: Tensor {
+  data:
+[-5.857811e-6],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}, max: Tensor {
+  data:
+[0.0001231963],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}
+Band 12 MLP output x_out - mean: Tensor {
+  data:
+[-4.557849],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}, max: Tensor {
+  data:
+[1.3635061],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}
+Band 12 Final output out - mean: Tensor {
+  data:
+[1.338173e-5],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}, max: Tensor {
+  data:
+[0.00028047312],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}
+Band 13 MLP output x_out - mean: Tensor {
+  data:
+[-4.840925],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}, max: Tensor {
+  data:
+[1.3994825],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}
+Band 13 Final output out - mean: Tensor {
+  data:
+[-6.426533e-6],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}, max: Tensor {
+  data:
+[0.00015897793],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}
+Band 14 MLP output x_out - mean: Tensor {
+  data:
+[-4.756095],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}, max: Tensor {
+  data:
+[1.3215115],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}
+Band 14 Final output out - mean: Tensor {
+  data:
+[-1.665027e-5],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}, max: Tensor {
+  data:
+[0.0002080694],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}
+Band 15 MLP output x_out - mean: Tensor {
+  data:
+[-4.9659166],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}, max: Tensor {
+  data:
+[1.4545842],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}
+Band 15 Final output out - mean: Tensor {
+  data:
+[1.2051481e-5],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}, max: Tensor {
+  data:
+[0.0004532639],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}
+Band 16 MLP output x_out - mean: Tensor {
+  data:
+[-4.949331],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}, max: Tensor {
+  data:
+[1.1126881],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}
+Band 16 Final output out - mean: Tensor {
+  data:
+[4.421153e-6],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}, max: Tensor {
+  data:
+[0.00013291131],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}
+Band 17 MLP output x_out - mean: Tensor {
+  data:
+[-5.1315045],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}, max: Tensor {
+  data:
+[3.179475],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}
+Band 17 Final output out - mean: Tensor {
+  data:
+[-4.2404895e-6],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}, max: Tensor {
+  data:
+[7.123355e-5],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}
+Band 18 MLP output x_out - mean: Tensor {
+  data:
+[-5.1811423],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}, max: Tensor {
+  data:
+[2.08822],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}
+Band 18 Final output out - mean: Tensor {
+  data:
+[4.3040127e-6],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}, max: Tensor {
+  data:
+[0.0001252007],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}
+Band 19 MLP output x_out - mean: Tensor {
+  data:
+[-5.045405],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}, max: Tensor {
+  data:
+[1.6628122],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}
+Band 19 Final output out - mean: Tensor {
+  data:
+[4.211494e-6],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}, max: Tensor {
+  data:
+[0.0004073581],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}
+Band 20 MLP output x_out - mean: Tensor {
+  data:
+[-5.0809865],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}, max: Tensor {
+  data:
+[2.7304533],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}
+Band 20 Final output out - mean: Tensor {
+  data:
+[4.9451764e-6],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}, max: Tensor {
+  data:
+[0.00021680525],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}
+Band 21 MLP output x_out - mean: Tensor {
+  data:
+[-5.4706755],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}, max: Tensor {
+  data:
+[2.0531874],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}
+Band 21 Final output out - mean: Tensor {
+  data:
+[-1.6927875e-6],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}, max: Tensor {
+  data:
+[7.303792e-5],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}
+Band 22 MLP output x_out - mean: Tensor {
+  data:
+[-5.569037],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}, max: Tensor {
+  data:
+[2.0204017],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}
+Band 22 Final output out - mean: Tensor {
+  data:
+[-7.1112515e-7],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}, max: Tensor {
+  data:
+[9.075405e-5],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}
+Band 23 MLP output x_out - mean: Tensor {
+  data:
+[-5.4463873],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}, max: Tensor {
+  data:
+[2.6884356],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}
+Band 23 Final output out - mean: Tensor {
+  data:
+[3.315009e-6],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}, max: Tensor {
+  data:
+[0.00013673647],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}
+Band 24 MLP output x_out - mean: Tensor {
+  data:
+[-5.57565],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}, max: Tensor {
+  data:
+[2.753008],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}
+Band 24 Final output out - mean: Tensor {
+  data:
+[2.7307632e-7],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}, max: Tensor {
+  data:
+[0.00015895734],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}
+Band 25 MLP output x_out - mean: Tensor {
+  data:
+[-5.577476],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}, max: Tensor {
+  data:
+[2.8732524],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}
+Band 25 Final output out - mean: Tensor {
+  data:
+[-6.900771e-7],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}, max: Tensor {
+  data:
+[6.195986e-5],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}
+Band 26 MLP output x_out - mean: Tensor {
+  data:
+[-5.5813093],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}, max: Tensor {
+  data:
+[2.5573666],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}
+Band 26 Final output out - mean: Tensor {
+  data:
+[8.9566356e-7],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}, max: Tensor {
+  data:
+[0.0001519229],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}
+Band 27 MLP output x_out - mean: Tensor {
+  data:
+[-5.5627985],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}, max: Tensor {
+  data:
+[2.3931158],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}
+Band 27 Final output out - mean: Tensor {
+  data:
+[7.509207e-7],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}, max: Tensor {
+  data:
+[0.00021530192],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}
+Band 28 MLP output x_out - mean: Tensor {
+  data:
+[-5.613388],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}, max: Tensor {
+  data:
+[3.6189096],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}
+Band 28 Final output out - mean: Tensor {
+  data:
+[1.2273246e-6],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}, max: Tensor {
+  data:
+[7.561156e-5],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}
+Band 29 MLP output x_out - mean: Tensor {
+  data:
+[-5.446003],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}, max: Tensor {
+  data:
+[2.48695],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}
+Band 29 Final output out - mean: Tensor {
+  data:
+[2.5898983e-6],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}, max: Tensor {
+  data:
+[0.00027587352],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}
+Band 30 MLP output x_out - mean: Tensor {
+  data:
+[-5.434159],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}, max: Tensor {
+  data:
+[2.3967566],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}
+Band 30 Final output out - mean: Tensor {
+  data:
+[8.8206225e-6],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}, max: Tensor {
+  data:
+[0.00035968565],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}
+Band 31 MLP output x_out - mean: Tensor {
+  data:
+[-5.619242],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}, max: Tensor {
+  data:
+[3.1928906],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}
+Band 31 Final output out - mean: Tensor {
+  data:
+[-3.5392075e-6],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}, max: Tensor {
+  data:
+[0.00018133475],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}
+Band 32 MLP output x_out - mean: Tensor {
+  data:
+[-5.552607],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}, max: Tensor {
+  data:
+[3.1951466],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}
+Band 32 Final output out - mean: Tensor {
+  data:
+[2.544946e-6],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}, max: Tensor {
+  data:
+[0.00040394944],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}
+Band 33 MLP output x_out - mean: Tensor {
+  data:
+[-5.478811],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}, max: Tensor {
+  data:
+[2.777534],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}
+Band 33 Final output out - mean: Tensor {
+  data:
+[4.6362725e-6],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}, max: Tensor {
+  data:
+[0.00035829848],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}
+Band 34 MLP output x_out - mean: Tensor {
+  data:
+[-5.683349],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}, max: Tensor {
+  data:
+[2.779771],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}
+Band 34 Final output out - mean: Tensor {
+  data:
+[-3.0918825e-6],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}, max: Tensor {
+  data:
+[0.00032386047],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}
+Band 35 MLP output x_out - mean: Tensor {
+  data:
+[-5.460537],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}, max: Tensor {
+  data:
+[2.7306273],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}
+Band 35 Final output out - mean: Tensor {
+  data:
+[6.751417e-6],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}, max: Tensor {
+  data:
+[0.0005164401],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}
+Band 36 MLP output x_out - mean: Tensor {
+  data:
+[-5.5565557],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}, max: Tensor {
+  data:
+[2.4998446],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}
+Band 36 Final output out - mean: Tensor {
+  data:
+[2.8934232e-6],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}, max: Tensor {
+  data:
+[0.00032525402],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}
+Band 37 MLP output x_out - mean: Tensor {
+  data:
+[-5.5965977],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}, max: Tensor {
+  data:
+[2.612078],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}
+Band 37 Final output out - mean: Tensor {
+  data:
+[-2.9656662e-6],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}, max: Tensor {
+  data:
+[0.00017839229],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}
+Band 38 MLP output x_out - mean: Tensor {
+  data:
+[-5.658589],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}, max: Tensor {
+  data:
+[2.2475412],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}
+Band 38 Final output out - mean: Tensor {
+  data:
+[7.4096415e-6],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}, max: Tensor {
+  data:
+[0.0003288865],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}
+Band 39 MLP output x_out - mean: Tensor {
+  data:
+[-5.6080666],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}, max: Tensor {
+  data:
+[1.6361668],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}
+Band 39 Final output out - mean: Tensor {
+  data:
+[-1.6339577e-6],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}, max: Tensor {
+  data:
+[0.0003460307],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}
+Band 40 MLP output x_out - mean: Tensor {
+  data:
+[-5.582811],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}, max: Tensor {
+  data:
+[2.0006516],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}
+Band 40 Final output out - mean: Tensor {
+  data:
+[3.05569e-6],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}, max: Tensor {
+  data:
+[0.00024568744],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}
+Band 41 MLP output x_out - mean: Tensor {
+  data:
+[-5.531159],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}, max: Tensor {
+  data:
+[1.5673184],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}
+Band 41 Final output out - mean: Tensor {
+  data:
+[1.6129729e-6],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}, max: Tensor {
+  data:
+[0.00025800432],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}
+Band 42 MLP output x_out - mean: Tensor {
+  data:
+[-5.4735074],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}, max: Tensor {
+  data:
+[2.1916418],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}
+Band 42 Final output out - mean: Tensor {
+  data:
+[2.154034e-6],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}, max: Tensor {
+  data:
+[0.0004537603],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}
+Band 43 MLP output x_out - mean: Tensor {
+  data:
+[-5.3769655],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}, max: Tensor {
+  data:
+[2.0979984],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}
+Band 43 Final output out - mean: Tensor {
+  data:
+[5.5550636e-6],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}, max: Tensor {
+  data:
+[0.00032834438],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}
+Band 44 MLP output x_out - mean: Tensor {
+  data:
+[-5.6115813],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}, max: Tensor {
+  data:
+[1.9011724],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}
+Band 44 Final output out - mean: Tensor {
+  data:
+[5.1260415e-8],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}, max: Tensor {
+  data:
+[0.00026288658],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}
+Band 45 MLP output x_out - mean: Tensor {
+  data:
+[-5.211416],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}, max: Tensor {
+  data:
+[2.712282],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}
+Band 45 Final output out - mean: Tensor {
+  data:
+[7.297251e-6],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}, max: Tensor {
+  data:
+[0.00028028185],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}
+Band 46 MLP output x_out - mean: Tensor {
+  data:
+[-5.59966],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}, max: Tensor {
+  data:
+[2.2137983],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}
+Band 46 Final output out - mean: Tensor {
+  data:
+[-1.5024817e-6],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}, max: Tensor {
+  data:
+[0.0002836429],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}
+Band 47 MLP output x_out - mean: Tensor {
+  data:
+[-5.3064656],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}, max: Tensor {
+  data:
+[2.269049],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}
+Band 47 Final output out - mean: Tensor {
+  data:
+[6.068032e-6],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}, max: Tensor {
+  data:
+[0.00023287201],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}
+Band 48 MLP output x_out - mean: Tensor {
+  data:
+[-5.6130285],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}, max: Tensor {
+  data:
+[2.393264],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}
+Band 48 Final output out - mean: Tensor {
+  data:
+[-8.30944e-6],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}, max: Tensor {
+  data:
+[0.00011199756],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}
+Band 49 MLP output x_out - mean: Tensor {
+  data:
+[-5.4219756],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}, max: Tensor {
+  data:
+[2.4514456],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}
+Band 49 Final output out - mean: Tensor {
+  data:
+[2.7821773e-6],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}, max: Tensor {
+  data:
+[0.00021016641],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}
+Band 50 MLP output x_out - mean: Tensor {
+  data:
+[-5.3505344],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}, max: Tensor {
+  data:
+[1.5891999],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}
+Band 50 Final output out - mean: Tensor {
+  data:
+[5.573168e-6],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}, max: Tensor {
+  data:
+[0.00025397292],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}
+Band 51 MLP output x_out - mean: Tensor {
+  data:
+[-5.5501485],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}, max: Tensor {
+  data:
+[1.6285086],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}
+Band 51 Final output out - mean: Tensor {
+  data:
+[-1.4145168e-7],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}, max: Tensor {
+  data:
+[0.00023806992],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}
+Band 52 MLP output x_out - mean: Tensor {
+  data:
+[-5.455084],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}, max: Tensor {
+  data:
+[2.1502428],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}
+Band 52 Final output out - mean: Tensor {
+  data:
+[-1.3415931e-6],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}, max: Tensor {
+  data:
+[0.00017438018],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}
+Band 53 MLP output x_out - mean: Tensor {
+  data:
+[-5.4874654],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}, max: Tensor {
+  data:
+[1.6111513],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}
+Band 53 Final output out - mean: Tensor {
+  data:
+[3.9550446e-7],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}, max: Tensor {
+  data:
+[0.000115718336],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}
+Band 54 MLP output x_out - mean: Tensor {
+  data:
+[-5.6604137],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}, max: Tensor {
+  data:
+[1.6465492],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}
+Band 54 Final output out - mean: Tensor {
+  data:
+[-1.7277057e-6],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}, max: Tensor {
+  data:
+[0.00014865829],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}
+Band 55 MLP output x_out - mean: Tensor {
+  data:
+[-5.578611],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}, max: Tensor {
+  data:
+[1.4679986],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}
+Band 55 Final output out - mean: Tensor {
+  data:
+[1.7955394e-7],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}, max: Tensor {
+  data:
+[0.00013231658],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}
+Band 56 MLP output x_out - mean: Tensor {
+  data:
+[-5.890914],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}, max: Tensor {
+  data:
+[1.8133954],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}
+Band 56 Final output out - mean: Tensor {
+  data:
+[1.1272912e-6],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}, max: Tensor {
+  data:
+[9.13602e-5],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}
+Band 57 MLP output x_out - mean: Tensor {
+  data:
+[-6.324278],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}, max: Tensor {
+  data:
+[1.7331208],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}
+Band 57 Final output out - mean: Tensor {
+  data:
+[-2.7956812e-6],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}, max: Tensor {
+  data:
+[3.9674964e-5],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}
+Band 58 MLP output x_out - mean: Tensor {
+  data:
+[-6.6030626],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}, max: Tensor {
+  data:
+[1.3748193],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}
+Band 58 Final output out - mean: Tensor {
+  data:
+[3.0743553e-7],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}, max: Tensor {
+  data:
+[0.00015760829],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}
+Band 59 MLP output x_out - mean: Tensor {
+  data:
+[-4.340441],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}, max: Tensor {
+  data:
+[2.515825],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}
+Band 59 Final output out - mean: Tensor {
+  data:
+[0.00063064764],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}, max: Tensor {
+  data:
+[0.34145507],
+  shape:  [1],
+  device:  BestAvailable,
+  backend:  "fusion<cubecl<wgpu<wgsl>>>",
+  kind:  "Float",
+  dtype:  "f32",
+}
+DEBUG: Mask mean: 0.000051348383, max: 0.34145507
+DEBUG: out_final mean: -0.0000007355877, max: 0.96697956
+DEBUG: ISTFT inner: input max=0.004649575, weight max=1, output max=0.0105823735
+DEBUG: ISTFT raw max: 0.017615363
+Saving output...
+Done! Saved to output.wav
