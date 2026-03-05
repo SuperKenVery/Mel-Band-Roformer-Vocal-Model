@@ -8,4 +8,6 @@ target/
 .trae/specs/
 .pixi/*
 *.wav
+*.m4a
+.DS_Store
 
