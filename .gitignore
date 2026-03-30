@@ -3,6 +3,7 @@ __pycache__/
 target/
 *.safetensors
 *.bpk
+*.mpk
 *.pt
 *.npy
 .trae/specs/

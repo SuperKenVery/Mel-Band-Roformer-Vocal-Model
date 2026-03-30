@@ -1,0 +1,1 @@
+Hello, this is ggg.txt file created at the project root.

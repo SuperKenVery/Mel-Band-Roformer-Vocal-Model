@@ -1,7 +1,7 @@
 use burn::{
     config::Config,
     module::Module,
-    nn::{Linear, LinearConfig, Dropout, DropoutConfig, Gelu, RmsNorm, RmsNormConfig},
+    nn::{Dropout, DropoutConfig, Gelu, Linear, LinearConfig, RmsNorm, RmsNormConfig},
     tensor::{backend::Backend, Tensor},
 };
 
@@ -51,7 +51,7 @@ impl<B: Backend> FeedForward<B> {
             dropout2,
         }
     }
-
+    
     pub fn forward(&self, x: Tensor<B, 3>) -> Tensor<B, 3> {
         let x = self.norm.forward(x);
         let x = self.linear1.forward(x);

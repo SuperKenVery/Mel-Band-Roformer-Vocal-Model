@@ -5,6 +5,7 @@ pub mod bandsplit;
 pub mod mask_estimator;
 pub mod mel_band_roformer;
 pub mod helper;
+pub mod weight_quantizer;
 
 pub use rotary::*;
 pub use attention::*;
@@ -13,3 +14,4 @@ pub use bandsplit::*;
 pub use mask_estimator::*;
 pub use mel_band_roformer::*;
 pub use helper::*;
+pub use weight_quantizer::*;

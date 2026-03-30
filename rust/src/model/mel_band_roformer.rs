@@ -9,6 +9,7 @@ use burn::{
 use crate::model::transformer::{Transformer, TransformerConfig};
 use crate::model::bandsplit::{BandSplit, BandSplitConfig};
 use crate::model::mask_estimator::{MaskEstimator, MaskEstimatorConfig};
+use crate::model::weight_quantizer::WeightQuantizer;
 
 pub struct MelBandConstants<B: Backend> {
     pub freq_indices: Tensor<B, 1, Int>,
@@ -94,6 +95,33 @@ pub struct MelBandRoformer<B: Backend> {
 }
 
 impl<B: Backend> MelBandRoformer<B> {
+    /// Quantize only the transformer weights (where 99% of parameters live).
+    /// Leaves STFT/ISTFT kernels, band_split, and mask_estimators in full precision.
+    pub fn quantize_transformers(self, quantizer: &mut WeightQuantizer) -> Self {
+        Self {
+            time_transformers: self.time_transformers.into_iter()
+                .map(|t| t.map(quantizer))
+                .collect(),
+            freq_transformers: self.freq_transformers.into_iter()
+                .map(|t| t.map(quantizer))
+                .collect(),
+            band_split: self.band_split,
+            mask_estimators: self.mask_estimators,
+            stft_conv_real: self.stft_conv_real,
+            stft_conv_imag: self.stft_conv_imag,
+            istft_conv_real: self.istft_conv_real,
+            istft_conv_imag: self.istft_conv_imag,
+            freq_selection_matrix: self.freq_selection_matrix,
+            freq_scatter_matrix: self.freq_scatter_matrix,
+            num_bands_per_freq: self.num_bands_per_freq,
+            stft_n_fft: self.stft_n_fft,
+            stft_hop_length: self.stft_hop_length,
+            stft_win_length: self.stft_win_length,
+            audio_channels: self.audio_channels,
+            num_stems: self.num_stems,
+        }
+    }
+
     pub fn new(
         config: &MelBandRoformerConfig,
         device: &B::Device,
@@ -333,29 +361,9 @@ impl<B: Backend> MelBandRoformer<B> {
         
         let r_kr = self.istft_conv_real.forward(real.clone());
         let i_ki = self.istft_conv_imag.forward(imag.clone());
-        
-        // Debug
-        let d = real.clone().into_data();
-        let v = d.to_vec::<f32>().unwrap();
-        let max_in = v.iter().fold(0.0f32, |a, &b| a.max(b.abs()));
-        
-        let d = self.istft_conv_real.weight.val().into_data();
-        let v = d.to_vec::<f32>().unwrap();
-        let max_w = v.iter().fold(0.0f32, |a, &b| a.max(b.abs()));
-        
-        let d = r_kr.clone().into_data();
-        let v = d.to_vec::<f32>().unwrap();
-        let max_out = v.iter().fold(0.0f32, |a, &b| a.max(b.abs()));
-        
-        println!("DEBUG: ISTFT inner: input max={}, weight max={}, output max={}", max_in, max_w, max_out);
 
         // Output is Real part
         let out = r_kr + i_ki; // [batch*channels, 1, time_out]
-        
-        let d = out.clone().into_data();
-        let v = d.to_vec::<f32>().unwrap();
-        let max = v.iter().fold(0.0f32, |a, &b| a.max(b.abs()));
-        println!("DEBUG: ISTFT raw max: {}", max);
 
         // Apply scaling factor for ISTFT (empirically determined)
         let out = out / 1792.9;

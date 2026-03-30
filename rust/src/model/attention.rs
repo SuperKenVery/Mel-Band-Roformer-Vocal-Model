@@ -1,11 +1,12 @@
 use burn::{
     config::Config,
     module::Module,
-    nn::{Linear, LinearConfig, Dropout, DropoutConfig, RmsNorm, RmsNormConfig},
-    tensor::{backend::Backend, Tensor, activation::{softmax, sigmoid}},
+    nn::{Dropout, DropoutConfig, RmsNorm, RmsNormConfig},
+    tensor::{backend::Backend, Tensor, activation::sigmoid, module::attention as flash_attention},
 };
 
 use crate::model::rotary::RotaryEmbedding;
+use burn::nn::{Linear, LinearConfig};
 
 #[derive(Config, Debug)]
 pub struct AttentionConfig {
@@ -33,8 +34,6 @@ pub struct Attention<B: Backend> {
     #[module(ignore)]
     dim_head: usize,
     #[module(ignore)]
-    scale: f64,
-    #[module(ignore)]
     rotary_embed: Option<RotaryEmbedding<B>>,
 }
 
@@ -48,15 +47,11 @@ impl<B: Backend> Attention<B> {
 
         let norm = RmsNormConfig::new(dim).init(device);
         
-        let to_qkv = LinearConfig::new(dim, dim_inner * 3)
-            .with_bias(false)
-            .init(device);
+        let to_qkv = LinearConfig::new(dim, dim_inner * 3).with_bias(false).init(device);
             
         let to_gates = LinearConfig::new(dim, heads).init(device);
         
-        let to_out = LinearConfig::new(dim_inner, dim)
-            .with_bias(false)
-            .init(device);
+        let to_out = LinearConfig::new(dim_inner, dim).with_bias(false).init(device);
             
         let dropout_layer = DropoutConfig::new(dropout).init();
         
@@ -75,7 +70,6 @@ impl<B: Backend> Attention<B> {
             dropout: dropout_layer,
             heads,
             dim_head,
-            scale: (dim_head as f64).powf(-0.5),
             rotary_embed,
         }
     }
@@ -111,14 +105,9 @@ impl<B: Backend> Attention<B> {
             (q, k)
         };
         
-        // Attention
-        let k_t = k.transpose(); // swaps last two dims: [batch, heads, dim_head, seq_len]
-        let sim = q.matmul(k_t) * self.scale; // [batch, heads, seq_len, seq_len]
-        
-        let attn = softmax(sim, 3); // softmax over last dim
-        let attn = self.dropout.forward(attn);
-        
-        let out = attn.matmul(v); // [batch, heads, seq_len, dim_head]
+        // Flash attention: softmax(QK^T / √d) · V, O(n) memory instead of O(n²)
+        let out = flash_attention(q, k, v, None);
+        let out = self.dropout.forward(out);
         
         // Gating
         // gates = to_gates(x) -> [batch, seq_len, heads]
